@@ -1,8 +1,8 @@
 package com.schoolarium.infrastructure.repositories
 
-import com.schoolarium.domain.model.Student
-import com.schoolarium.domain.repository.StudentRepository
-import com.schoolarium.infrastructure.database.tables.StudentTable
+import com.schoolarium.data.models.Student
+import com.schoolarium.data.repository.StudentRepository
+import com.schoolarium.database.tables.StudentTable
 import com.schoolarium.routing.request.StudentRequest
 import com.schoolarium.util.dbQuery
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

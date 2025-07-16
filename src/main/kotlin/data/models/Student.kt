@@ -1,4 +1,4 @@
-package com.schoolarium.domain.model
+package com.schoolarium.data.models
 
 import com.schoolarium.util.UUIDSerializer
 import kotlinx.serialization.Serializable

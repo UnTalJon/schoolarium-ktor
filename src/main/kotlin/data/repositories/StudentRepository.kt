@@ -1,6 +1,6 @@
-package com.schoolarium.domain.repository
+package com.schoolarium.data.repository
 
-import com.schoolarium.domain.model.Student
+import com.schoolarium.data.models.Student
 import com.schoolarium.routing.request.StudentRequest
 import java.util.UUID
 

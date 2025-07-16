@@ -1,4 +1,4 @@
-package com.schoolarium.infrastructure.database
+package com.schoolarium.database
 
 import io.ktor.server.application.*
 import org.koin.ktor.ext.get

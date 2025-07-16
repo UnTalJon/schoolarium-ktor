@@ -1,7 +1,7 @@
 package com.schoolarium.infrastructure.services
 
-import com.schoolarium.domain.model.Student
-import com.schoolarium.domain.repository.StudentRepository
+import com.schoolarium.data.models.Student
+import com.schoolarium.data.repository.StudentRepository
 import com.schoolarium.routing.request.StudentRequest
 import java.util.UUID
 

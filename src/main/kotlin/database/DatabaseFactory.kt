@@ -1,6 +1,6 @@
-package com.schoolarium.infrastructure.database
+package com.schoolarium.database
 
-import com.schoolarium.infrastructure.database.tables.StudentTable
+import com.schoolarium.database.tables.StudentTable
 import io.ktor.server.application.Application
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils

@@ -1,8 +1,8 @@
 package com.schoolarium
 
 import com.schoolarium.di.configureKoin
-import com.schoolarium.infrastructure.database.configureDatabases
-import com.schoolarium.routing.configureRequestValidation
+import com.schoolarium.database.configureDatabases
+import com.schoolarium.routing.request.configureRequestValidation
 import com.schoolarium.routing.configureRouting
 import com.schoolarium.routing.configureSerialization
 import io.ktor.server.application.*

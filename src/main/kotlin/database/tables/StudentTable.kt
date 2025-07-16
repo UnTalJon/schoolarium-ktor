@@ -1,7 +1,7 @@
-package com.schoolarium.infrastructure.database.tables
+package com.schoolarium.database.tables
 
-import com.schoolarium.infrastructure.database.MAX_VARCHAR_LENGTH
-import com.schoolarium.infrastructure.database.STUDENT_IDENTIFIER_LENGTH
+import com.schoolarium.database.MAX_VARCHAR_LENGTH
+import com.schoolarium.database.STUDENT_IDENTIFIER_LENGTH
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.charLength
 

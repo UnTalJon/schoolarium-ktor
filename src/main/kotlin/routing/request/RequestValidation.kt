@@ -1,6 +1,5 @@
-package com.schoolarium.routing
+package com.schoolarium.routing.request
 
-import com.schoolarium.routing.request.StudentRequest
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 
