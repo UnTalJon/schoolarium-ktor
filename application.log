@@ -1,0 +1,27 @@
+18:58:36 INFO  [Koin] - Started 4 definitions in 3.918 ms
+18:58:37 INFO  Application - Application started in 1.806 seconds.
+18:58:37 INFO  Application - Responding at http://127.0.0.1:8080
+18:58:52 INFO  Application - Status: 200 OK, HTTP method: GET, User agent: PostmanRuntime/7.44.1
+18:58:52 INFO  Application - Ingreso registrado. Alumno: Jonatan null null, ID: f16cfd26-863f-4a8a-9122-1a3e8095c119
+18:59:27 WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: io.netty.channel.AbstractChannel$AbstractUnsafe$8@16129b8a
+java.util.concurrent.RejectedExecutionException: event executor terminated
+	at io.netty.util.concurrent.SingleThreadEventExecutor.reject(SingleThreadEventExecutor.java:1005)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.offerTask(SingleThreadEventExecutor.java:388)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.addTask(SingleThreadEventExecutor.java:381)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:907)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute0(SingleThreadEventExecutor.java:873)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.execute(SingleThreadEventExecutor.java:863)
+	at io.netty.channel.DefaultChannelPipeline.destroyUp(DefaultChannelPipeline.java:816)
+	at io.netty.channel.DefaultChannelPipeline.destroy(DefaultChannelPipeline.java:801)
+	at io.netty.channel.DefaultChannelPipeline.access$700(DefaultChannelPipeline.java:45)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelUnregistered(DefaultChannelPipeline.java:1411)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelUnregistered(DefaultChannelPipeline.java:780)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:692)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:148)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:141)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:507)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:182)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1073)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1447)

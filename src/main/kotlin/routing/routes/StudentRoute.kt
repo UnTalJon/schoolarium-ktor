@@ -2,17 +2,15 @@ package com.schoolarium.routing.routes
 
 import com.schoolarium.infrastructure.services.StudentService
 import com.schoolarium.routing.request.StudentRequest
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.log
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.application
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import java.util.UUID
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import java.util.*
 
 fun Route.studentRoutes(studentService: StudentService) {
+
     get {
         val students = studentService.findAll()
         call.respond(HttpStatusCode.OK, students)
@@ -29,8 +27,11 @@ fun Route.studentRoutes(studentService: StudentService) {
     get("/findByIdentifier/{identifier}") {
         val id = call.parameters["identifier"] ?: return@get call.respond(HttpStatusCode.BadRequest)
         val student = studentService.findByIdentifier(id)
-            ?: return@get call.respond(HttpStatusCode.NotFound)
-        call.respond(HttpStatusCode.Found, student)
+            ?: return@get call.respond(HttpStatusCode.NotFound).also {
+                call.application.environment.log.info("Ingreso fallido. El alumno no existe o no se encontró<UNK>")
+            }
+        call.respond(HttpStatusCode.OK, student)
+        call.application.log.info("Ingreso registrado. Alumno: ${student.fullname()}, ID: ${student.id}")
     }
 
     post {

@@ -11,4 +11,6 @@ data class Student(
     val name: String,
     val firstSurname: String?,
     val secondSurname: String?,
-)
+) {
+    fun fullname(): String = "$name $firstSurname $secondSurname"
+}
