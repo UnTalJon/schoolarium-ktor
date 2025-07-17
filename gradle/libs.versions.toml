@@ -25,6 +25,7 @@ ktor-postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "
 ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "kotlin-version" }
 ktor-server-host-common = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor-version" }
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor-version" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor-version" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
