@@ -1,5 +1,6 @@
 package com.schoolarium.data.models
 
+import com.schoolarium.routing.request.StudentRequest
 import com.schoolarium.util.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -12,5 +13,7 @@ data class Student(
     val firstSurname: String?,
     val secondSurname: String?,
 ) {
-    fun fullname(): String = "$name $firstSurname $secondSurname"
+    fun fullname(): String = listOfNotNull(name, firstSurname, secondSurname)
+        .filter { it.isNotEmpty() }
+        .joinToString(" ")
 }

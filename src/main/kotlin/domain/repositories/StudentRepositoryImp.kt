@@ -1,7 +1,7 @@
-package com.schoolarium.infrastructure.repositories
+package com.schoolarium.domain.repositories
 
 import com.schoolarium.data.models.Student
-import com.schoolarium.data.repository.StudentRepository
+import com.schoolarium.data.repositories.StudentRepository
 import com.schoolarium.database.tables.StudentTable
 import com.schoolarium.routing.request.StudentRequest
 import com.schoolarium.util.dbQuery
@@ -76,14 +76,27 @@ class StudentRepositoryImp : StudentRepository {
         }
     }
 
-    override suspend fun update(student: Student): Student? = dbQuery {
-        val updatedRows = StudentTable.update({ StudentTable.id eq student.id }) {
+    override suspend fun update(id: UUID, student: StudentRequest): Student? = dbQuery {
+        val updatedRows = StudentTable.update({ StudentTable.id eq id }) {
             it[identifier] = student.identifier
             it[name] = student.name
             it[firstSurname] = student.firstSurname
             it[secondSurname] = student.secondSurname
         }
-        if (updatedRows > 0) student else null
+        if (updatedRows > 0) {
+            StudentTable.selectAll()
+                .where { StudentTable.id eq id }
+                .map { row ->
+                    Student(
+                        id = row[StudentTable.id].value,
+                        identifier = row[StudentTable.identifier],
+                        name = row[StudentTable.name],
+                        firstSurname = row[StudentTable.firstSurname],
+                        secondSurname = row[StudentTable.secondSurname]
+                    )
+                }
+                .singleOrNull()
+        } else null
     }
 
     override suspend fun deleteById(id: UUID): Boolean = dbQuery {

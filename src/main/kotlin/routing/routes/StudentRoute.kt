@@ -1,6 +1,7 @@
 package com.schoolarium.routing.routes
 
-import com.schoolarium.infrastructure.services.StudentService
+import com.schoolarium.data.enums.RecordType
+import com.schoolarium.domain.services.StudentService
 import com.schoolarium.routing.request.StudentRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -18,7 +19,7 @@ fun Route.studentRoutes(studentService: StudentService) {
 
     get("/findById/{id}") {
         val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-        val student = studentService.findById(UUID.fromString(id))
+        val student = studentService.findById(id)
             ?: return@get call.respond(HttpStatusCode.NotFound)
 
         call.respond(HttpStatusCode.Found, student)
@@ -42,8 +43,17 @@ fun Route.studentRoutes(studentService: StudentService) {
         } catch (e: Exception) {
             // Este catch es opcional, ya que StatusPages se encargará.
             // Es útil para depuración.
-            application.log.error("Error en la ruta /register", e)
+            application.log.error("Error en el método /post", e)
             throw e
         }
+    }
+
+    patch("/{id}") {
+        val id = call.parameters["id"] ?: return@patch call.respond(HttpStatusCode.BadRequest)
+        val student = call.receive<StudentRequest>()
+        val updatedStudent = studentService.update(id, student)
+            ?: return@patch call.respond(HttpStatusCode.NotModified)
+
+        call.respond(HttpStatusCode.OK, updatedStudent)
     }
 }
