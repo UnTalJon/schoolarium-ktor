@@ -1,15 +1,15 @@
 package com.schoolarium.database
 
 import com.schoolarium.database.tables.RecordTable
+import com.schoolarium.database.tables.SequenceTable
 import com.schoolarium.database.tables.StudentTable
-import io.ktor.server.application.Application
-import io.ktor.server.application.port
+import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabaseFactory(private val app: Application) {
-    val tables = arrayOf(StudentTable, RecordTable)
+    val tables = arrayOf(SequenceTable, StudentTable, RecordTable)
 
     fun connect() {
         val config = app.environment.config
@@ -22,7 +22,7 @@ class DatabaseFactory(private val app: Application) {
         val username = config.property("database.username").getString()
         val password = config.property("database.password").getString()
 
-        Database.Companion.connect(
+        Database.connect(
             url = "jdbc:$type://$host:$port/$name",
             driver = driver,
             user = username,

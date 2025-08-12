@@ -1,7 +1,8 @@
 package com.schoolarium.util
 
-import kotlinx.coroutines.Dispatchers
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-
-suspend fun <T> dbQuery(block: () -> T): T =
-    newSuspendedTransaction(Dispatchers.IO) { block() }
+fun String.isValidImageType(): Boolean {
+    return this in listOf(
+        "image/jpeg", "image/jpg", "image/png",
+        "image/gif", "image/webp", "image/bmp"
+    )
+}

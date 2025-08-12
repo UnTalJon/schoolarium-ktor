@@ -7,6 +7,6 @@ import com.schoolarium.domain.repositories.StudentRepositoryImp
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<StudentRepository> { StudentRepositoryImp() }
+    single<StudentRepository> { StudentRepositoryImp(get()) }
     single<RecordRepository> { RecordRepositoryImp() }
 }

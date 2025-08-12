@@ -5,5 +5,5 @@ import io.ktor.server.application.Application
 import org.koin.dsl.module
 
 val databaseModule = module {
-    single { DatabaseFactory(get<Application>()) }
+    single<DatabaseFactory> { DatabaseFactory(get<Application>()) }
 }

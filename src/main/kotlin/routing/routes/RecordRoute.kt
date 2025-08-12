@@ -5,27 +5,29 @@ import com.schoolarium.data.enums.StatusType
 import com.schoolarium.domain.services.RecordService
 import com.schoolarium.domain.services.StudentService
 import com.schoolarium.routing.request.RecordRequest
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
-fun Route.recordRoutes(recordService: RecordService, studentService: StudentService) {
+fun Route.recordRoutes(
+    studentService: StudentService,
+    recordService: RecordService
+) {
     get("/{id}/{recordType}") {
         val id = call.parameters["id"] ?: return@get call.respond(HttpStatusCode.BadRequest)
         val recordTypeAsText = call.parameters["recordType"] ?: return@get call.respond(HttpStatusCode.BadRequest)
 
         try {
-            val student = studentService.findById(id) ?: return@get call.respond(HttpStatusCode.NotFound)
+            val student = studentService.findById(id)
             val recordType = RecordType.valueOf(recordTypeAsText)
 
             val recordRequest = RecordRequest(
-                studentId = student.id.toString(),
+                studentId = student.id,
                 type = recordType,
                 status = StatusType.SUCCESS,
             )
 
-            val record = recordService.save(recordRequest)
+            val record = recordService.create(recordRequest)
 
             call.respond(HttpStatusCode.Created, record)
         } catch (e: IllegalArgumentException) {
@@ -35,7 +37,7 @@ fun Route.recordRoutes(recordService: RecordService, studentService: StudentServ
                 status = StatusType.ERROR,
             )
 
-            recordService.save(recordRequest)
+            recordService.create(recordRequest)
             return@get call.respond(HttpStatusCode.BadRequest)
         }
     }

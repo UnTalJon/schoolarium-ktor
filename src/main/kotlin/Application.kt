@@ -1,11 +1,11 @@
 package com.schoolarium
 
-import com.schoolarium.di.configureKoin
 import com.schoolarium.database.configureDatabases
+import com.schoolarium.di.configureKoin
 import com.schoolarium.domain.configureLogging
-import com.schoolarium.routing.request.configureRequestValidation
 import com.schoolarium.routing.configureRouting
 import com.schoolarium.routing.configureSerialization
+import com.schoolarium.routing.request.configureRequestValidation
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {

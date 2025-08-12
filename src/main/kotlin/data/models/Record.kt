@@ -1,17 +1,16 @@
 package com.schoolarium.data.models
 
-import com.schoolarium.data.enums.RecordType
-import com.schoolarium.data.enums.StatusType
-import com.schoolarium.util.UUIDSerializer
-import kotlinx.datetime.Instant
-import kotlinx.serialization.Serializable
-import java.util.UUID
+import com.schoolarium.database.tables.RecordTable
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 
-@Serializable
-data class Record(
-    val id: Long,
-    val studentId: @Serializable(with = UUIDSerializer::class) UUID,
-    val type: RecordType,
-    val status: StatusType,
-    val createdAt: Instant,
-)
+class Record(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Record>(RecordTable)
+
+
+    var studentId by RecordTable.studentId
+    var type by RecordTable.type
+    var status by RecordTable.status
+    var createdAt by RecordTable.createdAt
+}
