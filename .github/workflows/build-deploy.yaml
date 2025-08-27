@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew buildFatJar
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: schoolarium
           path: build/libs/schoolarium.jar
