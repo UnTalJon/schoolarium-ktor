@@ -1,7 +1,7 @@
 package com.schoolarium.database.tables
 
 import com.schoolarium.database.STUDENT_IDENTIFIER_LENGTH
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Table
 
 object SequenceTable : Table("sequences") {
     val prefix = varchar("prefix", STUDENT_IDENTIFIER_LENGTH).uniqueIndex()

@@ -4,9 +4,9 @@ import com.schoolarium.database.tables.RecordTable
 import com.schoolarium.database.tables.SequenceTable
 import com.schoolarium.database.tables.StudentTable
 import io.ktor.server.application.*
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 class DatabaseFactory(private val app: Application) {
     val tables = arrayOf(SequenceTable, StudentTable, RecordTable)

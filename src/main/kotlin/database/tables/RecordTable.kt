@@ -3,9 +3,9 @@ package com.schoolarium.database.tables
 import com.schoolarium.data.enums.RecordType
 import com.schoolarium.data.enums.StatusType
 import com.schoolarium.database.STUDENT_IDENTIFIER_LENGTH
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
-import org.jetbrains.exposed.sql.kotlin.datetime.datetime
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.datetime.CurrentDateTime
+import org.jetbrains.exposed.v1.datetime.datetime
 
 
 object RecordTable : IntIdTable("records") {

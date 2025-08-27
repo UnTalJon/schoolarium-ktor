@@ -5,7 +5,9 @@ import com.schoolarium.data.repositories.StudentRepository
 import com.schoolarium.domain.IdGenerator
 import com.schoolarium.routing.request.CreateStudentRequest
 import com.schoolarium.routing.request.UpdateStudentRequest
-import org.jetbrains.exposed.sql.transactions.transaction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 class StudentRepositoryImp(
     private val generator: IdGenerator

@@ -1,14 +1,16 @@
 package com.schoolarium.aws
 
-import io.ktor.server.application.Application
-import kotlinx.serialization.Serializable
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
-import software.amazon.awssdk.core.sync.RequestBody
-import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.s3.S3Client
-import software.amazon.awssdk.services.s3.model.PutObjectRequest
-import java.util.UUID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.model.PutObjectRequest
+import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.sdk.kotlin.services.s3.presigners.presignGetObject
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import io.ktor.server.application.*
+import java.util.*
+import kotlin.time.Duration.Companion.hours
 
 class S3Service(
     private val app: Application
@@ -16,55 +18,83 @@ class S3Service(
     private val config = app.environment.config
     private val s3Client: S3Client
 
-    private val accessKey = config.propertyOrNull("aws.accessKeyId")?.getString()
+    private val secretKeyId = config.propertyOrNull("aws.accessKeyId")?.getString()
         ?: throw Exception("Access Key ID is missing")
     private val secretKey = config.propertyOrNull("aws.secretAccessKey")?.getString()
         ?: throw Exception("Secret Key is missing")
-    private val region = config.propertyOrNull("aws.region")?.getString()
+    private val secretRegion = config.propertyOrNull("aws.region")?.getString()
         ?: throw Exception("Region is missing")
-    private val bucket = config.propertyOrNull("aws.bucket")?.getString()
-        ?: throw Exception("Bucket name Key is missing")
+    private val secretBucket = config.propertyOrNull("aws.bucket")?.getString()
+        ?: throw Exception("Bucket name is missing")
 
     init {
-        val credentials = AwsBasicCredentials.create(accessKey, secretKey)
-
-        s3Client = S3Client.builder()
-            .region(Region.of(region))
-            .credentialsProvider(StaticCredentialsProvider.create(credentials))
-            .build()
+        s3Client = S3Client {
+            region = secretRegion
+            credentialsProvider = StaticCredentialsProvider {
+                accessKeyId = secretKeyId
+                secretAccessKey = secretKey
+            }
+        }
     }
 
-    suspend fun uploadImage(fileBytes: ByteArray, contentType: String, fileExtension: String): String {
-        val key = "images/${UUID.randomUUID()}.$fileExtension"
+    suspend fun uploadImage(file: ByteArray, fileContentType: String, fileExtension: String): String = withContext(Dispatchers.IO) {
+        try {
+            val imageKey = "images/${UUID.randomUUID()}.$fileExtension"
 
-        val putObjectRequest = PutObjectRequest.builder()
-            .bucket(bucket)
-            .key(key)
-            .contentType(contentType)
-            .build()
+            val request = PutObjectRequest {
+                bucket = secretBucket
+                key = imageKey
+                contentType = fileContentType
+                body = ByteStream.fromBytes(file)
+            }
 
-        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileBytes))
+            s3Client.putObject(request)
+            imageKey
+        } catch (e: Exception) {
+            println("S3 Upload Error: ${e.message}")
+            e.printStackTrace()
+            throw Exception("Error uploading image: ${e.message}")
+        }
+    }
 
-        return "https://$bucket.s3.$region.amazonaws.com/$key"
+    suspend fun getObjectPresigned(objectKey: String): String = withContext(Dispatchers.IO) {
+        try {
+            println("Generating presigned URL for: $objectKey")
+            println("Bucket: $secretBucket")
+
+            val unsignedRequest = GetObjectRequest {
+                bucket = secretBucket
+                key = objectKey
+            }
+
+            val presignedRequest = s3Client.presignGetObject(unsignedRequest, 1.hours)
+            val url = presignedRequest.url.toString()
+
+            println("Generated URL: $url")
+            url
+        } catch (e: Exception) {
+            println("S3 Presign Error: ${e.message}")
+            e.printStackTrace()
+            throw Exception("Error generating presigned URL: ${e.message}")
+        }
+    }
+
+    // Función para verificar si un objeto existe
+    suspend fun objectExists(objectKey: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val headRequest = aws.sdk.kotlin.services.s3.model.HeadObjectRequest {
+                bucket = secretBucket
+                key = objectKey
+            }
+            s3Client.headObject(headRequest)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    // Función para cerrar el cliente cuando la aplicación termine
+    fun close() {
+        s3Client.close()
     }
 }
-
-@Serializable
-data class UploadResponse(
-    val success: Boolean,
-    val message: String,
-    val url: String? = null
-)
-
-@Serializable
-data class MultipleUploadResponse(
-    val success: Boolean,
-    val message: String,
-    val uploaded_count: Int = 0,
-    val urls: List<String> = emptyList()
-)
-
-@Serializable
-data class UrlUploadRequest(
-    val url: String
-)

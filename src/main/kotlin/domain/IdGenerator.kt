@@ -3,9 +3,9 @@ package com.schoolarium.domain
 import com.schoolarium.database.STUDENT_IDENTIFIER_LENGTH
 import com.schoolarium.database.tables.SequenceTable
 import io.ktor.server.application.*
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.upsert
 import java.time.LocalDateTime
 
 class IdGenerator(private val app: Application) {

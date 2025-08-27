@@ -4,8 +4,8 @@ import com.schoolarium.database.MAX_VARCHAR_LENGTH
 import com.schoolarium.database.MEDIUM_VARCHAR_LENGTH
 import com.schoolarium.database.SHORT_VARCHAR_LENGTH
 import com.schoolarium.database.STUDENT_IDENTIFIER_LENGTH
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.charLength
+import org.jetbrains.exposed.v1.core.charLength
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
 
 object StudentTable : IdTable<String>("students") {
     override val id = varchar("id", STUDENT_IDENTIFIER_LENGTH)

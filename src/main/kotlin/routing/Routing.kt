@@ -10,7 +10,7 @@ import org.koin.ktor.ext.get
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("Schoolarium API v0.0.2")
+            call.respondText("Schoolarium API v0.1.0")
         }
 
         route("/api/students") {

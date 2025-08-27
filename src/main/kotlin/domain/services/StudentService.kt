@@ -31,11 +31,24 @@ class StudentService(
     }
 
     suspend fun findById(id: String): StudentResponse {
-        return try {
-            studentRepository.findById(id)?.toResponse()
-                ?: throw Exception("Student not found")
+        try {
+            val student = studentRepository.findById(id)
+                ?: throw Exception("Student not found in database")
+
+            val presignedUrl = if (student.profilePicturePath != null) {
+                try {
+                    s3Service.getObjectPresigned(student.profilePicturePath!!)
+                } catch (s3Error: Exception) {
+                    println("S3 error for student $id: ${s3Error.message}")
+                    null // o student.profilePicturePath para usar la URL original
+                }
+            } else {
+                null
+            }
+
+            return student.toResponse(presignedUrl)
         } catch (e: Exception) {
-            throw Exception("Student not found, ${e.message}")
+            throw Exception("Student not found: ${e.message}")
         }
     }
 
