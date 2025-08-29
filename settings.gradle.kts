@@ -16,4 +16,3 @@ plugins {
 }
 
 rootProject.name = "schoolarium-api"
-include("app")

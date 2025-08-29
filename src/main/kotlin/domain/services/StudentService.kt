@@ -23,7 +23,20 @@ class StudentService(
         return try {
             Result.success(
                 studentRepository.findAll()
-                    .map { it.toResponse() }
+                    .map {
+                        val presignedUrl = if (it.profilePicturePath != null) {
+                            try {
+                                s3Service.getObjectPresigned(it.profilePicturePath!!)
+                            } catch (s3Error: Exception) {
+                                println("S3 error for student ${it.id}: ${s3Error.message}")
+                                null // o student.profilePicturePath para usar la URL original
+                            }
+                        } else {
+                            null
+                        }
+
+                        it.toResponse(presignedUrl)
+                    }
             )
         } catch (e: Exception) {
             Result.failure(e)
